@@ -26,5 +26,5 @@ handle_cast(stop,State)->
     file:close(State),
     {stop,normal,State}.
 
-terminate(_Reason, State) -> file:close(State), ok.
+terminate(_Reason, State) -> ok.
 
