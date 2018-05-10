@@ -46,11 +46,6 @@ handle_call({change,Limits},_From,Pids)->
     {reply,"Limits has changed. You can run jobs.",PidsNew}.
 
  
-terminate(_Reason, Pids) ->
-    lists:map(fun(Pid)->gun_worker:stop(Pid) end,Pids),
-    ets:delete(cookies),
-    inets:stop(),
-    read_url:stop(),
-    ok.
+terminate(_Reason, Pids) -> ok.
 
 
