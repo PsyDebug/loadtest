@@ -1,7 +1,7 @@
 -module(gun_url).
 -behaviour(gen_server).
 
--export([start/1, start/0, stop/0, pause/0, change_limits/1]).
+-export([start/1, run/0, stop/0, pause/0, change_limits/1]).
 -export([init/1, terminate/2, handle_cast/2, handle_call/3]).
 
 start(Limits) ->
@@ -14,7 +14,7 @@ init(Limits)->
     Pids=lists:map(fun({ok,Pid})->Pid end, [gun_worker:start() || _X<-lists:seq(1,Limits)]),
     {ok,Pids}.
 
-start()->
+run()->
     gen_server:cast(?MODULE, run_task).
 
 pause()->
