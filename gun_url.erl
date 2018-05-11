@@ -5,7 +5,7 @@
 -export([init/1, terminate/2, handle_cast/2, handle_call/3]).
 
 start(Limits) ->
-  gen_server:start_link({global, ?MODULE}, ?MODULE, Limits, []).
+  gen_server:start_link({local, ?MODULE}, gun_url, Limits, []).
 
 init(Limits)->
     inets:start(),
@@ -15,13 +15,13 @@ init(Limits)->
     {ok,Pids}.
 
 run()->
-    gen_server:cast(?MODULE, run_task).
+    gen_server:cast(gun_url, run_task).
 
 pause()->
-    gen_server:cast(?MODULE, pause).
+    gen_server:cast(gun_url, pause).
 
 stop()->
-    gen_server:cast(?MODULE, stop).
+    gen_server:cast(gun_url, stop).
 
 change_limits(Limits)->
     gen_server:call(gun_url, {change,Limits}).
@@ -45,7 +45,6 @@ handle_call({change,Limits},_From,Pids)->
     PidsNew=lists:map(fun({ok,Pid})->Pid end, [gun_worker:start() || _X<-lists:seq(1,Limits)]),
     {reply,"Limits has changed. You can run jobs.",PidsNew}.
 
- 
-terminate(_Reason, Pids) -> ok.
+terminate(_Reason, _Pids) -> ok.
 
 

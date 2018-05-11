@@ -7,7 +7,7 @@
 -define(GUN_FILE,"forgun.log").
 
 start() ->
-  gen_server:start_link({global, ?MODULE}, ?MODULE, [], []).
+  gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 init([])->
     file:open(?GUN_FILE, read).
@@ -26,5 +26,5 @@ handle_cast(stop,State)->
     file:close(State),
     {stop,normal,State}.
 
-terminate(_Reason, State) -> ok.
+terminate(_Reason, _State) ->  ok.
 
